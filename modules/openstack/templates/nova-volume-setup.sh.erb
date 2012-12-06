@@ -1,0 +1,4 @@
+#!/bin/sh
+dd if=/dev/zero of=<%= volume_image %> bs=1M seek=20k count=<%=(volume_size * 1024) %>
+losetup /dev/loop0  <%= volume_image %>
+vgcreate <%= volume_group %> /dev/loop0

@@ -1,0 +1,71 @@
+{
+  "name": "renren-openstack-essex",
+  "author": "Administrator",
+  "description": "",
+  "license": "",
+  "project_page": "",
+  "source": "",
+  "summary": "",
+  "version": "",
+  "checksums": {
+    "Modulefile": "05580de8829b780b000dc887437f3767",
+    "README.markdown": "3ac2d5e5d82b126f8000bcccedddc4aa",
+    "Rakefile": "f37e6131fe7de9a49b09d31596f5fbf1",
+    "examples\\mysite.pp": "c75c9b8059c0939d3b1c8068777979da",
+    "examples\\site.pp": "846f204b7bab029e1a992f9106c4c9e4",
+    "examples\\site.pp.old": "82f96fd962d21feebbb0f7a2a0057628",
+    "manifests\\all.pp": "051d5f6d4a89feec536a0649ef73a37c",
+    "manifests\\component\\auth_file.pp": "811844e210d4d174cd810de8b8b6e61b",
+    "manifests\\component\\glance.pp": "45efce9336e7c82ad492ab174bbe6554",
+    "manifests\\component\\horizon.pp": "ac5dd01af3205f31f1781fed778d597a",
+    "manifests\\component\\keystone.pp": "8593ac31735c1fab057ad069f9ec9610",
+    "manifests\\component\\mysql.pp": "6cd9c5180594bc5248267c9d1573f1d7",
+    "manifests\\component\\nova_controller.pp": "75b15777054a1c2d105bc57f4a5fb80b",
+    "manifests\\component\\swift.pp": "5dfc3583f85830c4dc79d1d37a797703",
+    "manifests\\compute.pp": "77deaa70f8c7aebaab4eca6f2c720e00",
+    "manifests\\controller.pp": "43574963affa442dca2eb4959fe82bc7",
+    "spec\\spec.opts": "a600ded995d948e393fbe2320ba8e51c",
+    "spec\\spec_helper.rb": "3ea886dd135e120afa31e0aab12e85b0",
+    "templates\\nova-volume-mount.erb": "44cc5a5bdc482e93f5744c419a8e8a84",
+    "templates\\nova-volume-setup.sh.erb": "c3c8fd31c7f4a57a7dd9e1408c71eee6",
+    "templates\\openstack-essex.repo.erb": "bce2d6cd7b847e518131d8fc4e341dd3"
+  },
+  "dependencies": [
+    {
+      "name": "puppetlabs/glance",
+      "version_requirement": "\u003d\u003d1.0.0"
+    },
+    {
+      "name": "puppetlabs/horizon",
+      "version_requirement": "\u003d\u003d1.0.0"
+    },
+    {
+      "name": "puppetlabs/keystone",
+      "version_requirement": "\u003d\u003d1.0.1"
+    },
+    {
+      "name": "puppetlabs/nova",
+      "version_requirement": "\u003d\u003d1.0.1"
+    },
+    {
+      "name": "puppetlabs/mysql",
+      "version_requirement": "\u003d\u003d0.5.0"
+    },
+    {
+      "name": "saz/memcached",
+      "version_requirement": "\u003d\u003d2.0.4"
+    },
+    {
+      "name": "saz/memcached",
+      "version_requirement": "\u003d\u003d2.0.4"
+    },
+    {
+      "name": "puppetlabs/apache",
+      "version_requirement": "\u003d\u003d0.4.0"
+    },
+    {
+      "name": "puppetlabs/ntp",
+      "version_requirement": "\u003d\u003d0.1.0"
+    }
+  ]
+}

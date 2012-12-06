@@ -1,0 +1,9 @@
+name 'ripienaar-concat'
+version '0.2.0'
+
+author 'R.I.Pienaar'
+license 'Apache'
+project_page 'http://github.com/ripienaar/puppet-concat'
+source 'git://github.com/ripienaar/puppet-concat.git'
+summary 'Concat module'
+description 'Concat module'

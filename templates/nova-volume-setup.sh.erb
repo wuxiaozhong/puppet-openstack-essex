@@ -1,4 +1,8 @@
 #!/bin/sh
-dd if=/dev/zero of=<%= volume_image %> bs=1M seek=<%= volume_size * 1024 %>k count=0
-losetup /dev/loop0  <%= volume_image %>
+vgremove -f <%= volume_group %>
+losetup -d /dev/loop0
+rm -rf /<%= volume_image %>
+
+dd if=/dev/zero of=<%= volume_image %> bs=1M seek=<%= volume_size %>k count=0
+losetup /dev/loop0 <%= volume_image %>
 vgcreate <%= volume_group %> /dev/loop0

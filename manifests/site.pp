@@ -1,5 +1,5 @@
 #yum
-$openstack_yum_host='10.248.34.18'
+$openstack_yum_host='10.248.21.69'
 #network interface
 $public_interface = 'eth0'
 $private_interface = 'eth0'

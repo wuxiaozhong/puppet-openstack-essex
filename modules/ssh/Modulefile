@@ -1,9 +1,0 @@
-name 'saz-ssh'
-version '1.1.1'
-
-author 'saz'
-license 'Apache License, Version 2.0'
-project_page 'https://github.com/saz/puppet-ssh'
-source 'git://github.com/saz/puppet-ssh.git'
-description 'Manage SSH client and server via puppet'
-dependency 'puppetlabs/stdlib', '>=2.2.1'

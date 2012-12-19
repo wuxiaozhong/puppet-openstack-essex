@@ -1,5 +1,5 @@
 #yum
-$openstack_yum_host='10.248.21.69'
+$openstack_yum_host='10.8.18.217'
 #network interface
 $public_interface = 'eth0'
 $private_interface = 'eth0'
@@ -19,7 +19,7 @@ $glance_keystone_user_password = 'glance'
 # $rabbit_password                 = 'openstack_rabbit_password'
 # $rabbit_user                     = 'openstack_rabbit_user'
 $fixed_network_range = '10.0.0.0/24'
-$floating_network_range = '10.248.34.200/27'
+$floating_network_range = false
 
 $secret_key = 'secret'
 $verbose = true
@@ -85,136 +85,7 @@ class openstack_init ($ntp_servers = 'UNSET', $volume_group = 'nova-volumes', $v
     require => File['/etc/yum.repos.d'],
   }
 }
-
-# 单节点部署模式-完全安装Openstack
-node /allinone.*/ {
-  # 初始化机器：
-  class { 'openstack_init': }
-
-  # 安装Openstack
-  class { 'openstack::all':
-    public_address => $ipaddress_eth0,
-    public_interface              => $public_interface,
-    private_interface             => $private_interface,
-    #    mysql_root_password     => $mysql_root_password,
-    keystone_db_password          => $keystone_db_password,
-    nova_db_password              => $nova_db_password,
-    glance_db_password            => $glance_db_password,
-    keystone_admin_token          => $keystone_admin_token,
-    keystone_admin_email          => $keystone_admin_email,
-    keystone_admin_password       => $keystone_admin_password,
-    nova_keystone_user_password   => $nova_user_password,
-    glance_keystone_user_password => $glance_user_password,
-    #    rabbit_password         => $rabbit_password,
-    #    rabbit_user             => $rabbit_user,
-    libvirt_type   => 'kvm',
-    # kvm,qemu
-    floating_range => $floating_network_range,
-    fixed_range    => $fixed_network_range,
-    secret_key     => $secret_key,
-    verbose        => $verbose,
-    auto_assign_floating_ip       => $auto_assign_floating_ip,
-    require        => Class['init'],
-  }
-
-  # 生成环境变量文件
-  class { 'openstack::component::auth_file':
-    keystone_admin_password => $keystone_admin_password,
-    keystone_admin_token    => $keystone_admin_token,
-    controller_node         => '127.0.0.1',
-    require                 => Class['openstack::all'],
-  }
-
-}
-
-# 多节点部署模式-安装控制节点
-node /controller.*/ {
-  # 初始化机器：
-  class { 'openstack_init': }
-
-  # 根据当前控制节点eth0网卡的IP地址作为其控制节点IP
-#  class { 'openstack::controller':
-#    # nic
-#    public_interface              => $public_interface,
-#    private_interface             => $private_interface,
-#    # ip
-#    public_address                => $ipaddress_eth0,
-#    internal_address              => $ipaddress_eth0,
-#    # db password
-#    #    mysql_root_password     => $mysql_root_password,
-#    keystone_db_password          => $keystone_db_password,
-#    glance_db_password            => $glance_db_password,
-#    nova_db_password              => $nova_db_password,
-#    # keystone config
-#    keystone_admin_token          => $keystone_admin_token,
-#    keystone_admin_email          => $keystone_admin_email,
-#    keystone_admin_password       => $keystone_admin_password,
-#    glance_keystone_user_password => $glance_keystone_user_password,
-#    nova_keystone_user_password   => $nova_keystone_user_password,
-#    # network
-#    network_manager               => 'nova.network.manager.FlatDHCPManager',
-#    floating_range                => $floating_network_range,
-#    fixed_range => $fixed_network_range,
-#    multi_host  => true,
-#    auto_assign_floating_ip       => $auto_assign_floating_ip,
-#    # volume
-#    volume_enabled                => true,
-#    secret_key  => $secret_key,
-#    verbose     => $verbose,
-#    #    rabbit_password         => $rabbit_password,
-#    #    rabbit_user             => $rabbit_user,
-#    #    export_resources        => false,
-#    require     => Class['init'],
-#  }
-#
-#  class { 'openstack::component::auth_file':
-#    keystone_admin_password => $keystone_admin_password,
-#    keystone_admin_token    => $keystone_admin_token,
-#    controller_node         => $ipaddress_eth0,
-#    require                 => Class['openstack::controller'],
-#  }
-}
-# 多节点部署模式-安装计算节点
-node /computer\d+.*/ {
-  $controller_node_public = '10.248.34.18'
-  $controller_node_internal = '10.248.34.18'
-  $computer_public_address = $ipaddress_eth0
-  $computer_internal_address = $ipaddress_eth0
-
-  # 已安装控制节点
-  if ($controller_node_public != undef) {
-    # 已安装控制节点
-    # 配置NTP服务器
-    #    exec{'ntpdate':
-    #      command =>'echo "*/30 * * * * root ntpdate -s ${controller_node_public}" >> /etc/crontab',
-    #      path    => '/bin;/usr/bin',
-    #    }
-    # 初始化机器：
-    class { 'openstack_init':
-      ntp_servers => $controller_node_public
-    }
-
-    # 安装Openstack计算节点模块
-    class { 'openstack::compute':
-      public_interface            => $public_interface,
-      private_interface           => $private_interface,
-      internal_address            => $computer_internal_address,
-      nova_db_host                => $controller_node_public,
-      nova_db_password            => 'nova',
-      nova_keystone_user_password => $nova_keystone_user_password,
-      rabbit_host                 => $controller_node_internal,
-      glance_api_servers          => "${controller_node_internal}:9292",
-      vncproxy_host               => $controller_node_public,
-      # network
-      network_manager             => 'nova.network.manager.FlatDHCPManager',
-      fixed_range                 => $fixed_network_range,
-      libvirt_type                => 'kvm',
-      # qemu,kvm
-      multi_host                  => true,
-      #    rabbit_password    => $rabbit_password,
-      #    rabbit_user        => $rabbit_user,
-      verbose                     => $verbose,
-      require                     => Class['init'],
-    }
-  }
-}
+####  import hosts  ####
+import "allinone/*.pp"
+import "controller/*.pp"
+import "computer/*.pp"

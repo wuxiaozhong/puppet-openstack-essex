@@ -44,6 +44,7 @@ class nova::network(
   }
 
   if $install_service {
+    notify{"install nova-network":}
     nova::generic_service { 'network':
       enabled        => $enabled,
       package_name   => $::nova::params::network_package_name,

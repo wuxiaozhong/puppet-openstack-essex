@@ -13,6 +13,7 @@ class openstack::component::auth_file(
   file { '/root/openrc':
     content =>
   "
+  #!/bin/sh
   export OS_TENANT_NAME=${$keystone_admin_tenant}
   export OS_USERNAME=${$keystone_admin_user}
   export OS_PASSWORD=${keystone_admin_password}
@@ -20,10 +21,13 @@ class openstack::component::auth_file(
   export OS_AUTH_STRATEGY=keystone
   export SERVICE_TOKEN=${keystone_admin_token}
   export SERVICE_ENDPOINT=http://${controller_node}:35357/v2.0/
-  "
+  ",
+    group   => root,
+    owner   => root,
+    mode    => 755
   }
   exec{'export current environment':
-    command   => 'source /root/openrc',
+    command   => '/root/openrc',
     path      => '/sbin/:/usr/sbin/:/usr/bin/:/bin/',
     require   => File['/root/openrc'],
   }

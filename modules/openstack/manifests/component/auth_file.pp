@@ -12,15 +12,14 @@ class openstack::component::auth_file(
 ) {
   file { '/root/openrc':
     content =>
-  "
-  #!/bin/sh
-  export OS_TENANT_NAME=${$keystone_admin_tenant}
-  export OS_USERNAME=${$keystone_admin_user}
-  export OS_PASSWORD=${keystone_admin_password}
-  export OS_AUTH_URL=\"http://${controller_node}:5000/v2.0/\"
-  export OS_AUTH_STRATEGY=keystone
-  export SERVICE_TOKEN=${keystone_admin_token}
-  export SERVICE_ENDPOINT=http://${controller_node}:35357/v2.0/
+"#!/bin/sh
+export OS_TENANT_NAME=${$keystone_admin_tenant}
+export OS_USERNAME=${$keystone_admin_user}
+export OS_PASSWORD=${keystone_admin_password}
+export OS_AUTH_URL=\"http://${controller_node}:5000/v2.0/\"
+export OS_AUTH_STRATEGY=keystone
+export SERVICE_TOKEN=${keystone_admin_token}
+export SERVICE_ENDPOINT=http://${controller_node}:35357/v2.0/
   ",
     group   => root,
     owner   => root,

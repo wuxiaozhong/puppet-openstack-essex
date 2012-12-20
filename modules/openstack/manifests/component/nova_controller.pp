@@ -126,7 +126,8 @@ class openstack::component::nova_controller (
 	# Configure nova-network
 	if $multi_host {#当前启用多网络服务主机时，控制点不启用网络服务，而各计算节点启动网络服务
 	  nova_config { 'multi_host': value => 'True' }
-	  $enable_network_service = false
+	  #由于依赖关系，会默认安装网络服务，所以还是让控制节点安装网络服务
+	  $enable_network_service = true
 	} else {
 	  if $enabled {
 	    $enable_network_service = true
